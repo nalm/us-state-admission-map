@@ -1,0 +1,83 @@
+﻿<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>미국 주 편입 타임라인</title>
+  <link rel="icon" href="data:,">`r`n  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <h1>미국 주 편입 타임라인</h1>
+        <p class="subtitle">델라웨어부터 하와이까지, 연방에 편입된 순서대로 주가 지도에 채워집니다.</p>
+      </div>
+      <div class="metric-strip" aria-label="현재 타임라인 요약">
+        <div class="metric"><span>현재 시점</span><strong id="metricYear">1787</strong></div>
+        <div class="metric"><span>편입 주</span><strong id="metricCount">1/50</strong></div>
+        <div class="metric"><span>현재 주</span><strong id="metricState">DE</strong></div>
+      </div>
+    </header>
+    <main>
+      <section class="map-shell" aria-label="미국 주 편입 지도">
+        <div class="map-stage" id="mapStage">
+          <svg id="map" role="img" aria-label="미국 주 지도"></svg>
+          <div class="map-label"><strong id="yearLabel">1787</strong><span id="eventLabel">델라웨어 연방 가입</span></div>
+          <div class="legend" aria-label="범례">
+            <span class="legend-item"><span class="swatch" style="background:var(--future)"></span>편입 전</span>
+            <span class="legend-item"><span class="swatch" style="background:var(--original)"></span>13개 원주</span>
+            <span class="legend-item"><span class="swatch" style="background:var(--frontier)"></span>초기 내륙 확장</span>
+            <span class="legend-item"><span class="swatch" style="background:var(--louisiana)"></span>루이지애나권</span>
+            <span class="legend-item"><span class="swatch" style="background:var(--mexican)"></span>서남부 확장</span>
+            <span class="legend-item"><span class="swatch" style="background:var(--pacific)"></span>태평양권</span>
+            <span class="legend-item"><span class="swatch" style="background:var(--late)"></span>20세기 편입</span>
+            <span class="legend-item"><span class="swatch" style="background:var(--current)"></span>현재 추가</span>
+          </div>
+          <div class="tooltip" id="tooltip"></div>
+          <div class="error" id="errorBox"><div><strong>지도 데이터를 불러오지 못했습니다.</strong><p>네트워크 연결을 확인한 뒤 페이지를 새로고침해 주세요.</p></div></div>
+        </div>
+        <div class="controls" aria-label="타임라인 조작">
+          <div class="control-row">
+            <div class="buttons">
+              <button class="icon-button" id="resetBtn" title="처음으로" aria-label="처음으로"><i data-lucide="rotate-ccw"></i></button>
+              <button class="icon-button" id="prevBtn" title="이전 주" aria-label="이전 주"><i data-lucide="step-back"></i></button>
+              <button class="icon-button" id="playBtn" title="재생" aria-label="재생"><i data-lucide="play"></i></button>
+              <button class="icon-button" id="nextBtn" title="다음 주" aria-label="다음 주"><i data-lucide="step-forward"></i></button>
+            </div>
+            <input id="timeline" type="range" min="1" max="50" value="1" step="1" aria-label="주 편입 순서">
+            <div class="timeline-meta"><span>1. 델라웨어</span><span>50. 하와이</span></div>
+          </div>
+          <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+        </div>
+      </section>
+      <aside class="side-panel" aria-label="주 상세 정보">
+        <article class="state-card">
+          <div class="flag-wrap"><img id="flagImage" alt="델라웨어 주기" loading="lazy"></div>
+          <div class="state-body">
+            <p class="kicker" id="stateKicker">1번째 가입</p>
+            <div class="state-title"><div><h2 id="stateName">델라웨어</h2><small id="stateEnglish">Delaware</small></div><span class="abbr" id="stateAbbr">DE</span></div>
+            <p class="summary" id="stateSummary"></p>
+            <div class="fact-grid">
+              <div class="fact"><span>연방가입일</span><strong id="admissionDate"></strong></div>
+              <div class="fact"><span>주도</span><strong id="capital"></strong></div>
+              <div class="fact"><span>최대 도시</span><strong id="largestCity"></strong></div>
+              <div class="fact"><span>면적</span><strong id="area"></strong></div>
+              <div class="fact"><span>인구</span><strong id="population"></strong></div>
+              <div class="fact"><span>하원의석</span><strong id="houseSeats"></strong></div>
+            </div>
+          </div>
+        </article>
+        <section class="next-card"><h3>다음 편입 주</h3><div class="next-list" id="nextList"></div></section>
+        <section class="source-card"><h3>자료</h3>기본 표 데이터는 나무위키 <a href="https://namu.wiki/w/%EB%AF%B8%EA%B5%AD/%EC%A3%BC" target="_blank" rel="noreferrer">미국/주</a> 문서의 항목 구조를 참고했습니다. 지도 경계는 us-atlas, 주기 이미지는 Wikimedia Commons의 공개 파일 경로를 사용합니다.</section>
+      </aside>
+    </main>
+  </div>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+
